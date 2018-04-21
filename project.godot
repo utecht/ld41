@@ -13,6 +13,14 @@ config_version=3
 config/name="ld41"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=600
+window/size/height=1060
+window/size/resizable=false
+window/handheld/orientation="portrait"
+window/handheld/emulate_touchscreen=true
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"
