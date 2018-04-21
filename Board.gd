@@ -39,6 +39,17 @@ func _ready():
 	for i in range(size):
 		var letter = Letter.instance()
 		letter.letter = LETTERS[randi() % LETTERS.size()]
+		
+		# uncomment for making logo
+#		if i == 0:
+#			letter.letter = 'L'
+#		if i == 1:
+#			letter.letter = 'D'
+#		if i == 5:
+#			letter.letter = '4'
+#		if i == 6:
+#			letter.letter = '1'
+			
 		var x = (i % 5) * 50
 		var y = (i/5) * 50
 		letter.global_position = Vector2(x, y)
