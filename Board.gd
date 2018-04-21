@@ -12,8 +12,12 @@ var dragging = false
 var wordlist = []
 var to_be_replaced = []
 var scoring_words = []
+var score = 0
+var combo = 1.0
+var high_score = 0
 
 func _ready():
+	$GameOver.hide()
 	randomize()
 	var word_file = File.new()
 	word_file.open("res://small_words.txt", word_file.READ)
@@ -21,6 +25,16 @@ func _ready():
 		var line = word_file.get_line()
 		wordlist.append(line)
 	word_file.close()
+	
+	var high_score_save = File.new()
+	if high_score_save.file_exists("user://high_score.save"):
+		high_score_save.open("user://high_score.save", high_score_save.READ)
+		if !high_score_save.eof_reached():
+			high_score = high_score_save.get_32()
+		high_score_save.close()
+	else:
+		high_score = 0
+	$HighScoreLabel.text = str("High Score: ", high_score)
 	
 	for i in range(size):
 		var letter = Letter.instance()
@@ -89,9 +103,12 @@ func word_search():
 			if result != null and !results.has(result):
 				results.append(result)
 	print(results)
-	if !results.empty():
-		for letter in board:
-			letter.scoring()
+	for letter in board:
+		letter.scoring()
+	if results.empty():
+		$GameOverTimer.start()
+		$GameOver.show()
+	else:
 		scoring_words = results
 		$Score.start()
 
@@ -127,7 +144,8 @@ func _on_Reset_timeout():
 	for letter_index in to_be_replaced:
 		board[letter_index].reset(LETTERS[randi() % LETTERS.size()])
 	to_be_replaced = []
-	$ScoreLabel.text = ""
+	$WordLabel.text = ""
+	combo = 1.0
 	for letter in board:
 		letter.scoring_over()
 
@@ -135,7 +153,6 @@ func _on_Reset_timeout():
 func _on_Score_timeout():
 	if scoring_words.empty():
 		print("Resetting")
-		$Score.stop()
 		$Reset.start()
 	else:
 		var result = scoring_words.pop_front()
@@ -143,5 +160,20 @@ func _on_Score_timeout():
 			if !to_be_replaced.has(letter_index):
 				to_be_replaced.append(letter_index)
 			board[letter_index].highlight()
-		$ScoreLabel.text = str($ScoreLabel.text, result[1], "\n")
+		var word_score = (result[1].length() * 100) * combo
+		combo += .5
+		$WordLabel.text = str($WordLabel.text, result[1], " - ", word_score, "\n")
+		score += word_score
+		$ScoreLabel.text = str("Score: ", score)
+		if score > high_score:
+			$HighScoreLabel.text = str("High Score: ", score)
 		$Score.start()
+
+
+func _on_GameOverTimer_timeout():
+	if score > high_score:
+		var high_score_save = File.new()
+		high_score_save.open("user://high_score.save", high_score_save.WRITE)
+		high_score_save.store_32(score)
+		high_score_save.close()
+	get_tree().reload_current_scene()

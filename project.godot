@@ -11,12 +11,12 @@ config_version=3
 [application]
 
 config/name="ld41"
+run/main_scene="res://Board.tscn"
 config/icon="res://icon.png"
 
 [display]
 
 window/size/width=600
-window/size/height=1060
 window/size/resizable=false
 window/handheld/orientation="portrait"
 window/handheld/emulate_touchscreen=true
