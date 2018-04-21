@@ -16,6 +16,12 @@ func reset(new_letter):
 	letter = new_letter
 	$Button.text = letter
 	$Highlight.visible = false
+	
+func scoring():
+	$Button.disabled = true
+	
+func scoring_over():
+	$Button.disabled = false
 
 func _process(delta):
 	# Called every frame. Delta is time since last frame.
@@ -25,9 +31,10 @@ func _process(delta):
 		global_position = pos - offset
 
 func _on_Button_button_down():
-	offset = get_global_mouse_position() - global_position
-	button_down = true
-	emit_signal("grabbed", self)
+	if !$Button.disabled:
+		offset = get_global_mouse_position() - global_position
+		button_down = true
+		emit_signal("grabbed", self)
 
 func _on_Button_button_up():
 	button_down = false

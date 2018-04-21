@@ -11,6 +11,7 @@ var current_letter
 var dragging = false
 var wordlist = []
 var to_be_replaced = []
+var scoring_words = []
 
 func _ready():
 	randomize()
@@ -88,12 +89,11 @@ func word_search():
 			if result != null and !results.has(result):
 				results.append(result)
 	print(results)
-	for result in results:
-		for letter_index in result[0]:
-			if !to_be_replaced.has(letter_index):
-				to_be_replaced.append(letter_index)
-			board[letter_index].highlight()
-	$Reset.start()
+	if !results.empty():
+		for letter in board:
+			letter.scoring()
+		scoring_words = results
+		$Score.start()
 
 func _picked_up(letter):
 	current_letter = letter
@@ -127,3 +127,21 @@ func _on_Reset_timeout():
 	for letter_index in to_be_replaced:
 		board[letter_index].reset(LETTERS[randi() % LETTERS.size()])
 	to_be_replaced = []
+	$ScoreLabel.text = ""
+	for letter in board:
+		letter.scoring_over()
+
+
+func _on_Score_timeout():
+	if scoring_words.empty():
+		print("Resetting")
+		$Score.stop()
+		$Reset.start()
+	else:
+		var result = scoring_words.pop_front()
+		for letter_index in result[0]:
+			if !to_be_replaced.has(letter_index):
+				to_be_replaced.append(letter_index)
+			board[letter_index].highlight()
+		$ScoreLabel.text = str($ScoreLabel.text, result[1], "\n")
+		$Score.start()
