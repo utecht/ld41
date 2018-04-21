@@ -16,10 +16,7 @@ _sections_unfolded = [ "Font", "Settings" ]
 position = Vector2( 25, 25 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
-__meta__ = {
-"_edit_group_": true
-}
-letter = null
+letter = "B"
 
 [node name="Button" type="Button" parent="." index="0"]
 
@@ -46,6 +43,26 @@ group = null
 flat = false
 align = 1
 _sections_unfolded = [ "Margin", "Rect", "custom_fonts" ]
+
+[node name="Highlight" type="ColorRect" parent="." index="1"]
+
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -25.0
+margin_top = -25.0
+margin_right = 25.0
+margin_bottom = 25.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 0.878906, 0.757134, 0.0995636, 0.298314 )
+_sections_unfolded = [ "Margin", "Visibility" ]
 
 [connection signal="button_down" from="Button" to="." method="_on_Button_button_down"]
 

@@ -9,6 +9,14 @@ export (String) var letter
 func _ready():
 	$Button.text = letter
 
+func highlight():
+	$Highlight.visible = true
+	
+func reset(new_letter):
+	letter = new_letter
+	$Button.text = letter
+	$Highlight.visible = false
+
 func _process(delta):
 	# Called every frame. Delta is time since last frame.
 	# Update game logic here.

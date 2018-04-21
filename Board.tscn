@@ -10,4 +10,13 @@ script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
 Letter = ExtResource( 2 )
 
+[node name="Reset" type="Timer" parent="." index="0"]
+
+process_mode = 1
+wait_time = 3.0
+one_shot = false
+autostart = false
+
+[connection signal="timeout" from="Reset" to="." method="_on_Reset_timeout"]
+
 
