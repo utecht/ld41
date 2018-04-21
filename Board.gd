@@ -110,6 +110,8 @@ func word_search():
 		$GameOver.show()
 	else:
 		scoring_words = results
+		combo = (results.size() / 2.0) + 0.5
+		$WordLabel.text = str("   ", combo, "x Combo", "\n")
 		$Score.start()
 
 func _picked_up(letter):
@@ -156,13 +158,17 @@ func _on_Score_timeout():
 		$Reset.start()
 	else:
 		var result = scoring_words.pop_front()
+		var color = Color(randf(), randf(), randf(), .75)
 		for letter_index in result[0]:
 			if !to_be_replaced.has(letter_index):
 				to_be_replaced.append(letter_index)
-			board[letter_index].highlight()
-		var word_score = (result[1].length() * 100) * combo
-		combo += .5
-		$WordLabel.text = str($WordLabel.text, result[1], " - ", word_score, "\n")
+			board[letter_index].highlight(color)
+		var word_score = pow(10, result[1].length() - 2) * combo
+		color.a = 1.0
+		$WordLabel.push_color(color)
+		$WordLabel.add_text(str(result[1], " - ", word_score, "\n"))
+		$WordLabel.pop()
+		
 		score += word_score
 		$ScoreLabel.text = str("Score: ", score)
 		if score > high_score:

@@ -9,7 +9,8 @@ export (String) var letter
 func _ready():
 	$Button.text = letter
 
-func highlight():
+func highlight(color):
+	$Highlight.color = color
 	$Highlight.visible = true
 	
 func reset(new_letter):
