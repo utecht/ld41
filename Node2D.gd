@@ -18,6 +18,12 @@ func reset(new_letter):
 	$Button.text = letter
 	$Highlight.visible = false
 	
+func time_up():
+	var event = InputEventMouseButton.new()
+	event.button_index = BUTTON_LEFT
+	event.pressed = false
+	get_tree().input_event(event)
+	
 func scoring():
 	$Button.disabled = true
 	

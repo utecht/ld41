@@ -15,6 +15,7 @@ var scoring_words = []
 var score = 0
 var combo = 1.0
 var high_score = 0
+var round_num = 1
 
 func _ready():
 	$GameOver.hide()
@@ -35,6 +36,7 @@ func _ready():
 	else:
 		high_score = 0
 	$HighScoreLabel.text = str("High Score: ", high_score)
+	$WordLabel.text = str("Round: ", round_num, " - ", combo, "x Combo", "\n")
 	
 	for i in range(size):
 		var letter = Letter.instance()
@@ -58,6 +60,7 @@ func _ready():
 		letter.connect("dropped", self, "_dropped")
 		board.append(letter)
 
+
 func check_horizontal(start, end):
 	var word = ""
 	for i in range(start, end + 1):
@@ -65,8 +68,8 @@ func check_horizontal(start, end):
 	if wordlist.has(word.to_lower()):
 		return [range(start, end + 1), word]
 
+
 func search_horizontal(row_num):
-	#print("searching - ", index)
 	var results = []
 	var start_row = row_num * 5
 	var end_row = start_row + 4
@@ -80,14 +83,15 @@ func search_horizontal(row_num):
 	results.append(check_horizontal(start_row + 1, end_row - 1))
 	results.append(check_horizontal(start_row + 2, end_row))
 	return results
-	
+
+
 func check_vertical(start, end):
 	var word = ""
 	for i in range(start, end + 5, 5):
-		#print("start: ", start, " end: ", end, " i: ", i)
 		word += board[i].letter
 	if wordlist.has(word.to_lower()):
 		return [range(start, end + 5, 5), word]
+
 
 func search_vertical(column_num):
 	var results = []
@@ -104,6 +108,7 @@ func search_vertical(column_num):
 	results.append(check_vertical(start_col + 10, end_col))
 	return results
 
+
 func word_search():
 	var results = []
 	for starting_pos in range(5):
@@ -113,7 +118,6 @@ func word_search():
 		for result in search_vertical(starting_pos):
 			if result != null and !results.has(result):
 				results.append(result)
-	print(results)
 	for letter in board:
 		letter.scoring()
 	if results.empty():
@@ -121,22 +125,27 @@ func word_search():
 		$GameOver.show()
 	else:
 		scoring_words = results
-		combo = (results.size() / 2.0) + 0.5
-		$WordLabel.text = str("   ", combo, "x Combo", "\n")
+		#combo = (results.size() / 2.0) + 0.5
+		#$WordLabel.text = str("   ", combo, "x Combo", "\n")
 		$Score.start()
+
 
 func _picked_up(letter):
 	current_letter = letter
 	starting_pos = letter.global_position
 	dragging = true
+	$DragTimer.start()
+
 
 func _dropped(letter):
 	letter.global_position = starting_pos
 	dragging = false
 	word_search()
 
+
 func _process(delta):
 	if dragging:
+		$DragProgress.value = $DragProgress.max_value * ($DragTimer.time_left / $DragTimer.wait_time)
 		var pos = get_global_mouse_position() - global_position + Vector2(25, 25)
 		pos.x = clamp(pos.x, 0, 249)
 		pos.y = clamp(pos.y, 0, 249)
@@ -157,15 +166,16 @@ func _on_Reset_timeout():
 	for letter_index in to_be_replaced:
 		board[letter_index].reset(LETTERS[randi() % LETTERS.size()])
 	to_be_replaced = []
-	$WordLabel.text = ""
-	combo = 1.0
+	combo += .5
+	round_num += 1
+	$WordLabel.text = str("Round: ", round_num, " - ", combo, "x Combo", "\n")
+	$DragProgress.value = $DragProgress.max_value
 	for letter in board:
 		letter.scoring_over()
 
 
 func _on_Score_timeout():
 	if scoring_words.empty():
-		print("Resetting")
 		$Reset.start()
 	else:
 		var result = scoring_words.pop_front()
@@ -194,3 +204,7 @@ func _on_GameOverTimer_timeout():
 		high_score_save.store_32(score)
 		high_score_save.close()
 	get_tree().reload_current_scene()
+
+
+func _on_DragTimer_timeout():
+	current_letter.time_up()
