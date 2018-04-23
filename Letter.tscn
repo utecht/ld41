@@ -11,7 +11,7 @@ use_filter = false
 font_data = ExtResource( 2 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="Letter" type="Node2D"]
+[node name="Letter" type="Node2D" index="0"]
 
 position = Vector2( 25, 25 )
 script = ExtResource( 1 )

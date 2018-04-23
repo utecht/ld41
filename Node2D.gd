@@ -39,10 +39,12 @@ func _process(delta):
 
 func _on_Button_button_down():
 	if !$Button.disabled:
+		z_index = 5
 		offset = get_global_mouse_position() - global_position
 		button_down = true
 		emit_signal("grabbed", self)
 
 func _on_Button_button_up():
+	z_index = 0
 	button_down = false
 	emit_signal("dropped", self)

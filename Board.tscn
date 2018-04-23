@@ -4,7 +4,7 @@
 [ext_resource path="res://Letter.tscn" type="PackedScene" id=2]
 [ext_resource path="res://fonts/Roboto-Black.ttf" type="DynamicFontData" id=3]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 
 size = 15
 use_mipmaps = false
@@ -12,7 +12,7 @@ use_filter = false
 font_data = ExtResource( 3 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 
 size = 20
 use_mipmaps = false
@@ -42,7 +42,7 @@ flags = 4
 gradient = SubResource( 5 )
 width = 200
 
-[node name="Board" type="Position2D" index="0"]
+[node name="Board" type="Position2D"]
 
 position = Vector2( 50, 300 )
 script = ExtResource( 1 )
@@ -96,7 +96,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/normal_font = SubResource( 2 )
+custom_fonts/normal_font = SubResource( 1 )
 bbcode_enabled = false
 bbcode_text = ""
 visible_characters = -1
@@ -126,7 +126,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Score: 0"
 percent_visible = 1.0
 lines_skipped = 0
@@ -149,7 +149,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "High Score: 0"
 percent_visible = 1.0
 lines_skipped = 0
@@ -179,7 +179,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Game Over"
 align = 1
 percent_visible = 1.0
